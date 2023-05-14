@@ -135,7 +135,7 @@ Simply open your Info.plist file and add the following:
 <string>This app needs access to location when open and in the background.</string>
 ```
 
-In addition, you can add the `Background Modes` capability to your XCode project (Project > Targets > Runner > Signing and Capabilties > "+" Button > "Background Modes") and check `Location Updates` after adding it.
+In addition, you need to add the `Background Modes` capability to your XCode project (Project > Signing and Capabilties > "+ Capability" button) and select `Location Updates`.g>This app needs access to location when open and in the background.</string>
 
 Opt-in to the embedded views preview by adding a boolean property to the app's `Info.plist` file
 with the key `io.flutter.embedded_views_preview` and the value `YES`.
@@ -153,18 +153,7 @@ If you want to run your app on the Simulator, please make sure to set a location
 
 ### Basic usage
 
-First of all, it is recommend to enable Hybrid Composition on Android to avoid flickering issues when the map gets redrawn: 
-
-```dart
-void main() {
-  if(Platform.isAndroid) {
-    AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
-  }
-  return runApp(MyApp());
-}
-```
-
-You can now use PlacePicker by pushing to a new page using Navigator, OR put as a child of any widget.  
+You can use PlacePicker by pushing to a new page using Navigator, OR put as a child of any widget.  
 When the user picks a place on the map, it will return result to 'onPlacePicked' with PickResult type.
 Alternatively, you can build your own way with 'selectedPlaceWidgetBuilder' and fetch result from it (See the instruction below).
 
@@ -189,7 +178,6 @@ Navigator.push(
           },
           initialPosition: HomePage.kInitialPosition,
           useCurrentLocation: true,
-          resizeToAvoidBottomInset: false, // only works in page mode, less flickery, remove if wrong offsets
         ),
       ),
     );
@@ -236,8 +224,8 @@ onPlacePicked | Callback(PickResult) | Invoked when user picks the place and sel
 initialPosition | LatLng | (Required) Initial center position of google map when it is created. If useCurrentLocation is set to true, it will try to get device's current location first using GeoLocator. 
 useCurrentLocation | bool | Whether to use device's current location for initial center position. This will be used instead of initial position when it is set to true AND user ALLOW to collect their location. If DENIED, initialPosition will be used.
 desiredLocationAccuracy | [LocationAccuracy](https://pub.dev/packages/geolocator) | Accuracy of fetching current location. Defaults to 'high'.
-hintText | String? | Hint text of search bar. Defaults to 'Search here'
-searchingText | String? | A text which appears when searching is performing. Default to 'Searching...'
+hintText | String | Hint text of search bar
+searchingText | String | A text which appears when searching is performing. Default to 'Searching...'
 selectText* | String? | Text to show in the button that allows to pick the focused address. Defaults to show only an icon.
 outsideOfPickAreaText* | String? | Text to show in the disabled button when the focused address is outside of the pick area. Defaults to show only an icon.
 proxyBaseUrl | String | Used for API calling on google maps. In case of using a proxy the baseUrl can be set. The apiKey is not required in case the proxy sets it.
@@ -256,7 +244,7 @@ selectedPlaceWidgetBuilder | WidgetBuilder | Specified on below section
 pinBuilder | WidgetBuilder | Specified on below section
 introPanelWidgetBuilder | WidgetBuilder | Specified on below section
 autocompleteOffset | num | The position, in the input term, of the last character that the service uses to match predictions
-autocompleteRadius | num | The distance (in meters) within which to return place results. When set, autocomplete's results will be ordered by best results in the radius and by closest outside of the radius. Set to 1 to order all results by proximity.
+autocompleteRadius | num | The distance (in meters) within which to return place results
 autocompleteLanguage | String | The [language code](https://developers.google.com/maps/faq#languagesupport), indicating in which language the results should be returned, if possible. 
 autocompleteComponents | List\<Components\> | A grouping of places to which you would like to restrict your results. Currently, you can use components to filter by up to 5 countries.
 autocompleteTypes | List\<String\> | The types of place results to return. See [Place Types](https://developers.google.com/places/web-service/autocomplete#place_types).
@@ -264,13 +252,14 @@ strictbounds | bool | Returns only those places that are strictly within the reg
 region | String | region — The region code, specified as a ccTLD (country code top-level domain) two-character value. Most ccTLD codes are identical to ISO 3166-1 codes, with some exceptions. This parameter will only influence, not fully restrict, search results. If more relevant results exist outside of the specified region, they may be included. **When this parameter is used, the country name is omitted from the resulting formatted_address for results in the specified region.**
 pickArea* | CircleArea | Circle that defines the area in which the address can be picked. Can be colored how it's preferred.
 selectInitialPosition | bool | Whether to display selected place on initial map load. Defaults to false.
-resizeToAvoidBottomInset | bool | Resize map when keyboard is shown and can only be disabled when using a full screen map. Defaults to true.
+resizeToAvoidBottomInset | bool | Refer to Scaffold's resizeToAvoidBottomInset property.
 initialSearchString | String | Sets initial search string for auto complete search
 searchForInitialValue | bool | Wether to automatically search for initial value on start
+forceAndroidLocationManager | bool | On Android devices you can set this to true to force the geolocator plugin to use the 'LocationManager' to determine the position instead of the 'FusedLocationProviderClient'. On iOS this is ignored.
 myLocationButtonCooldown | int | Cooldown time in seconds for the 'myLocationButton'. Defaults to 10 seconds. 
 forceSearchOnZoomChanged | bool | Wether to allow place search even when the zoom has changed. Defaults to false.
 automaticallyImplyAppBarLeading | bool | By default, there is a back button on the top. Setting false will remove the back button.
-autocompleteOnTrailingWhitespace | bool | Whether to allow autocomplete to run even on whitespace at the end of the search. Defaults to false.
+autocompleteOnTrailingWhitespace | bool | Whether to allow autocomplete to run even on whitespace at the end of the search. Defaults to false. Issue ref #54.
 onTapBack* | Function(PlaceProvider)? | Called when leaving the Google Picker by pressing the back button.
 zoomGesturesEnabled\* | bool | Disable pinch zoom gestures, this does not control the appearance of the zoom in/out buttons.  
 zoomControlsEnabled\* | bool | Show the zoom in/out buttons on the bottom right of the screen, this does not control the pinch zoom gestures.
@@ -442,7 +431,7 @@ final ThemeData darkTheme = ThemeData.dark().copyWith(
 );
 ```
 
-![](screenshot.png)
+![](screenshot2.png)
 
 ## Feature Requests and Issues
 > Please file feature requests at the [original issue tracker][tracker] and bugs at the [MB edition issue tracker][tracker_fork]. I fetch any significant feature requests from the original repository, but bugs could be specific to this MB edition, so I want to take care by myself on them.
