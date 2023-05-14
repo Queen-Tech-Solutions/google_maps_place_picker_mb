@@ -58,6 +58,7 @@ class GoogleMapPlacePicker extends StatelessWidget {
     this.zoomGesturesEnabled = true,
     this.zoomControlsEnabled = false,
     this.fullMotion = false,
+    this.isMiniMap = false
   }) : super(key: key);
 
   final LatLng initialTarget;
@@ -81,6 +82,8 @@ class GoogleMapPlacePicker extends StatelessWidget {
   final bool? usePlaceDetailSearch;
 
   final bool? selectInitialPosition;
+
+  final bool isMiniMap;
 
   final String? language;
   final CircleArea? pickArea;
@@ -201,6 +204,8 @@ class GoogleMapPlacePicker extends StatelessWidget {
       mapToolbarEnabled: false,
       initialCameraPosition: initialCameraPosition,
       mapType: mapType,
+      scrollGesturesEnabled: !isMiniMap,
+      rotateGesturesEnabled: !isMiniMap,
       myLocationEnabled: true,
       circles: pickArea != null && pickArea!.radius > 0
           ? Set<Circle>.from([pickArea])

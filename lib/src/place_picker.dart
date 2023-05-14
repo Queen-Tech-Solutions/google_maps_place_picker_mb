@@ -76,6 +76,7 @@ class PlacePicker extends StatefulWidget {
     this.onMapTypeChanged,
     this.zoomGesturesEnabled = true,
     this.zoomControlsEnabled = false,
+    this.isMiniMap = false,
   }) : super(key: key);
 
   final String apiKey;
@@ -101,6 +102,8 @@ class PlacePicker extends StatefulWidget {
 
   final bool usePinPointingSearch;
   final bool usePlaceDetailSearch;
+
+  final bool isMiniMap;
 
   final num? autocompleteOffset;
   final num? autocompleteRadius;
@@ -336,7 +339,7 @@ class _PlacePickerState extends State<PlacePicker> {
   }
 
   Widget _buildSearchBar(BuildContext context) {
-    return Row(
+    return widget.isMiniMap ? SizedBox() : Row(
       children: <Widget>[
         widget.automaticallyImplyAppBarLeading || widget.onTapBack != null
             ? IconButton(
@@ -452,6 +455,7 @@ class _PlacePickerState extends State<PlacePicker> {
       fullMotion: !widget.resizeToAvoidBottomInset,
       initialTarget: initialTarget,
       appBarKey: appBarKey,
+      isMiniMap: widget.isMiniMap,
       selectedPlaceWidgetBuilder: widget.selectedPlaceWidgetBuilder,
       pinBuilder: widget.pinBuilder,
       onSearchFailed: widget.onGeocodingSearchFailed,
